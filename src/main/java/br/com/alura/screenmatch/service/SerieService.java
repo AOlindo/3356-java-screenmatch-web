@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.alura.screenmatch.Dto.EpisodioDto;
 import br.com.alura.screenmatch.Dto.SerieDto;
 import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.repository.SerieRepository;
@@ -45,4 +46,15 @@ public class SerieService {
 		return null;
 	}
 	
+	public List<EpisodioDto>obterTodasTemporadas(Long id) {
+		Optional<Serie> serie = serieRepository.findById(id);
+		if(serie.isPresent()) {
+			Serie s = serie.get();
+			return s.getEpisodios().stream()
+					.map(e -> new EpisodioDto(e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo()))
+					.collect(Collectors.toList());
+		}
+		
+		return null;
+	}
 }
